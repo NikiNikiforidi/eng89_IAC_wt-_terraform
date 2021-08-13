@@ -17,5 +17,5 @@ https://learn.hashicorp.com/tutorials/terraform/install-cli
 	- Verify installation -> environment variables
 	- Under System variables -> PATH -> Edit
 	- Add path where terraform.exe is located 
-	- Save changes, might need to restart computer 
-- In command prompt, run `terraform` and `terraform --version`
+	- Save changes, close and re-open terminal so changes are updated
+- In command prompt, run `terraform` and `terraform --version` to check if installation is correct
