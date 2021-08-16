@@ -9,8 +9,9 @@ https://learn.hashicorp.com/tutorials/terraform/install-cli
 <br></br>
 
 ![terraform](https://user-images.githubusercontent.com/86292184/129584732-5d18433f-8b3e-4f35-a50b-6c1e8503f7cf.png)
+<br> </br>
 ![vpc config](https://user-images.githubusercontent.com/86292184/129584862-b1992db8-c758-41f1-b253-f741cc33d4cb.PNG)
-
+<br> </br>
 - -----------------------------------
 ### Install Terraform
 - Install apppropriate package
@@ -39,15 +40,29 @@ https://learn.hashicorp.com/tutorials/terraform/install-cli
 
 - --------------------------------------------------
 ### Create main.tf file, initialise and run
-- create a new key pair in your ssh folder ` ssh-keygen -t rsa -b 2048 -v -f eng89_your_name`
-- Go to aws -> ec2 -> key pairs -> Create key pair -> .pem -> create
-- Put new .pem file in .ssh folder
+- Create a new key pair in your local .ssh folder
+	- Run:  ` ssh-keygen -t rsa -b 2048 -v -f eng89_your_name`
 <br> </br>
-
+- Create new .pem key and add to .ssh folder
+	- Go to aws -> ec2 -> key pairs -> Create key pair -> .pem -> create
+	- Put new .pem file in .ssh folder
+<br> </br>
+- Check out `varaible.tf` file
 - Check out `main.tf` file to see the code required to create an instance
+<br> </br>
+- **Check and run main.tf**
 - `terraform init` # Initialise terraform
-- `terraform plan` # To check if everything workds, no syntax errors
-- `terraform apply` # Basically runs the main.tf file
+- `terraform plan` # To check if everything works, no syntax errors
+- `terraform apply` # Runs the main.tf file
 
 <br> </br>
 - ----------------------------------------------------------
+### Run Instance
+
+- Navigate to your local ssh folder and SSH into isntance
+- Once your instance is running -> connect: 
+	- -> copy `chmod...` and run in terminal
+	- -> Cope `ssh -i...` and run in terminal
+<br> </br>
+- To navigate and run SSH key command in another file location, use: `ssh -i "~/.ssh/eng89_niki.pem...`
+
