@@ -1,4 +1,4 @@
-# Terraform
+# IAC with Terraform
 
 - HashiCorp Terraform is an open source infrastructure as code (IaC) software tool that allows DevOps engineers to programmatically provision the physical resources an application requires to run.
 
@@ -19,3 +19,7 @@ https://learn.hashicorp.com/tutorials/terraform/install-cli
 	- Add path where terraform.exe is located 
 	- Save changes, close and re-open terminal so changes are updated
 - In command prompt, run `terraform` and `terraform --version` to check if installation is correct
+- --------------------------------------------------------------------------------
+### Create environment variable
+<br> </br>
+- --------------------------------------------------
