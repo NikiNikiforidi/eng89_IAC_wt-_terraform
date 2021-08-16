@@ -7,6 +7,10 @@
 <br> </br>
 https://learn.hashicorp.com/tutorials/terraform/install-cli
 <br></br>
+
+![terraform](https://user-images.githubusercontent.com/86292184/129584732-5d18433f-8b3e-4f35-a50b-6c1e8503f7cf.png)
+![vpc config](https://user-images.githubusercontent.com/86292184/129584862-b1992db8-c758-41f1-b253-f741cc33d4cb.PNG)
+
 - -----------------------------------
 ### Install Terraform
 - Install apppropriate package
@@ -32,8 +36,13 @@ https://learn.hashicorp.com/tutorials/terraform/install-cli
 	- Variable value:
 - Re-open terminal 
 <br> </br>
+
 - --------------------------------------------------
 ### Create main.tf file, initialise and run
+- create a new key pair in your ssh folder ` ssh-keygen -t rsa -b 2048 -v -f eng89_your_name`
+- Go to aws -> ec2 -> key pairs -> Create key pair -> .pem -> create
+- Put new .pem file in .ssh folder
+<br> </br>
 
 - Check out `main.tf` file to see the code required to create an instance
 - `terraform init` # Initialise terraform
@@ -41,3 +50,4 @@ https://learn.hashicorp.com/tutorials/terraform/install-cli
 - `terraform apply` # Basically runs the main.tf file
 
 <br> </br>
+- ----------------------------------------------------------

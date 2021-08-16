@@ -40,7 +40,6 @@ resource "aws_instance" "app_instance" {
 ami = "ami-038d7b856fe7557b3"
 
 
-
 # type of instance
 instance_type = "t2.micro"
 
@@ -49,13 +48,21 @@ instance_type = "t2.micro"
 associate_public_ip_address = true
 
 
+#key_name = "eng89_niki" # This is the same as below
+
+
 # provide name to this instance using tags
 tags = {
       Name = "eng89_niki_terraform_app"       
 
  }
 
-key_name = "eng89_devops"
+
+
+ key_name = var.aws_key_name # goes to varaible.tf
+
+
+
 }
 
 
