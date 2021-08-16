@@ -18,8 +18,26 @@ https://learn.hashicorp.com/tutorials/terraform/install-cli
 	- Under System variables -> PATH -> Edit
 	- Add path where terraform.exe is located 
 	- Save changes, close and re-open terminal so changes are updated
-- In command prompt, run `terraform` and `terraform --version` to check if installation is correct
-- --------------------------------------------------------------------------------
+- In command prompt, run  `terraform --version` to check if installation is correct
+<br> </br>
+- ------------------------------------------------------------
 ### Create environment variable
+- Right click windows icon
+- systems -> scroll down ->Advanced system settings -> Environment Variables
+- Under ** User variable for YOUR_NAME** -> New
+	- Variable name: AWS_ACCESS_KEY_ID
+	- Variable value: 
+	<br> </br>
+	- Variable name: AWS_SECRET_ACCESS_KEY
+	- Variable value:
+- Re-open terminal 
 <br> </br>
 - --------------------------------------------------
+### Create main.tf file, initialise and run
+
+- Check out `main.tf` file to see the code required to create an instance
+- `terraform init` # Initialise terraform
+- `terraform plan` # To check if everything workds, no syntax errors
+- `terraform apply` # Basically runs the main.tf file
+
+<br> </br>
