@@ -67,12 +67,9 @@ resource "aws_subnet" "app_subnet" {
 }
 
 
-#  PRIVATE SUBNET
 
 
 
-
-# DONT THINK ITS WORKING PROPERLY
 # ROUTE TABLE
 
 resource "aws_route_table" "terra_route_table" {
