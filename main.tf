@@ -70,7 +70,7 @@ resource "aws_subnet" "app_subnet" {
 
 
 
-
+# DONT THINK ITS WORKING
 # ROUTE TABLE
 resource "aws_route_table" "terra_route_table" {
     vpc_id = aws_vpc.terraform_vpc_code.id
@@ -98,11 +98,14 @@ resource "aws_security_group" "pub_sec_group" {
   name        = "eng89_niki_terra_sg_app"
   description = "app security group"
   vpc_id =    aws_vpc.terraform_vpc_code.id
+
   ingress {
     from_port   = "80"
     to_port     = "80"
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    # ADD PORT 3000
+    # SMTH ELSE IS WRONG
   }
 
   egress {
@@ -128,7 +131,7 @@ resource "aws_security_group_rule" "my_ssh" {
   security_group_id = aws_security_group.pub_sec_group.id
 }
 
-
+## NETWORK ACLs?????
 
 resource "aws_security_group_rule" "vpc_access"{
   type        = "ingress"
