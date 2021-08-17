@@ -7,7 +7,12 @@ variable "cidr_block_0" {
 
 
 variable "cidr_block_1" {
-  default="10.201.1.0/16"
+  default="10.201.1.0/24"
+}
+
+
+variable "cidr_block_2" {
+  default="10.201.2.0/24"
 }
 
 
