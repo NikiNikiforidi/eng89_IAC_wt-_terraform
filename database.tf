@@ -24,15 +24,16 @@ resource "aws_security_group" "pri_sec_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["5.203.234.162/32"] # MY IP
+    #cidr_blocks = ["5.203.234.162/32"] # MY IP
+    cidr_blocks = ["0.0.0.0/0"]
     }
 
-  ingress {                           # allow  for nginx
-    from_port   = "27017"
-    to_port     = "27017"
-    protocol    = "tcp"
-    cidr_blocks = ["54.194.12.76/32"]  # public instance app ip
-    }
+ # ingress {                           # allow  for nginx
+ #   from_port   = "27017"
+ #   to_port     = "27017"
+ #   protocol    = "tcp"
+ #   cidr_blocks = ["54.194.12.76/32"]  # public instance app ip
+ #   }
 
 
 
@@ -50,46 +51,46 @@ resource "aws_security_group" "pri_sec_group" {
 
 
 # NETWORK ACLs
-resource "aws_network_acl" "private_nacl" {
-  vpc_id = aws_vpc.terraform_vpc.id
+#resource "aws_network_acl" "private_nacl" {
+#  vpc_id = aws_vpc.terraform_vpc.id
 
 
 
-  ingress {
-      protocol   = "tcp"
-      rule_no    = 120
-      action     = "allow"
-      cidr_block = "5.203.234.162/32" # MY IP
-      from_port  = 22
-      to_port    = 22
-    }
+#  ingress {
+#      protocol   = "tcp"
+#      rule_no    = 120
+#      action     = "allow"
+#      cidr_block = "5.203.234.162/32" # MY IP
+#      from_port  = 22
+#      to_port    = 22
+#    }
   
-  ingress {
-      protocol   = "tcp"
-      rule_no    = 120
-      action     = "allow"
-      cidr_block = "10.201.2.0/24"
-      from_port  = 27017
-      to_port    = 27017
-    }
+#  ingress {
+#      protocol   = "tcp"
+#      rule_no    = 120
+#      action     = "allow"
+#      cidr_block = "10.201.2.0/24"
+#      from_port  = 27017
+#      to_port    = 27017
+#    }
 
 
 
-  egress {
-      protocol   = "tcp"
-      rule_no    = 100
-      action     = "allow"
-      cidr_block = "0.0.0.0/0"
-      from_port  = 80
-      to_port    = 80
-    }
+#  egress {
+#      protocol   = "tcp"
+#      rule_no    = 100
+#      action     = "allow"
+#      cidr_block = "0.0.0.0/0"
+#      from_port  = 80
+#      to_port    = 80
+#    }
 
 
 
-  tags = {
-    Name = "eng89_terra_niki_nACL_pri"
-  }
-}
+#  tags = {
+#    Name = "eng89_terra_niki_nACL_pri"
+#  }
+#}
 
 
 # INSTANCE
@@ -97,7 +98,7 @@ resource "aws_instance" "db_instance" {
 ami                         = "ami-077ab28a9abbcf213"
 instance_type               = "t2.micro"
 
-subnet_id = aws_subnet.db_subnet.id
+subnet_id = aws_subnet.app_subnet.id # PUBLIC SUBNET
 associate_public_ip_address = false
 
 
