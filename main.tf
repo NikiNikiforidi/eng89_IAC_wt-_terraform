@@ -28,7 +28,7 @@
 
 
 
-# Create a VPC  
+# VPC 
 resource "aws_vpc" "terraform_vpc_code" {
   cidr_block       = var.cidr_block_0 
   instance_tenancy = "default"
@@ -40,7 +40,7 @@ resource "aws_vpc" "terraform_vpc_code" {
 
 
 
-# Create Internet Gateway
+# INTERNET GATEWAY
 resource "aws_internet_gateway" "terraform_igw" {
   vpc_id = aws_vpc.terraform_vpc_code.id
   
@@ -53,7 +53,7 @@ resource "aws_internet_gateway" "terraform_igw" {
 
 
 
-# DIORTHOSI PUBLIC SUBNET
+#  PUBLIC SUBNET
 resource "aws_subnet" "app_subnet" {
     vpc_id = aws_vpc.terraform_vpc_code.id
     cidr_block = var.cidr_block_1
@@ -65,18 +65,34 @@ resource "aws_subnet" "app_subnet" {
 }
 
 
+#  PRIVATE SUBNET
 
 
 
 
 
+# ROUTE TABLE
+resource "aws_route_table" "terra_route_table" {
+    vpc_id = aws_vpc.terraform_vpc_code.id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.terraform_igw.id
+    }
+    tags = {
+        "Name" = "eng89_niki_terra_RT"
+    }
+}
 
-# Create Custom Route Table
+resource "aws_route_table_association" "terra_assoc_RT" {
+    subnet_id = aws_subnet.app_subnet.id
+    route_table_id = aws_route_table.terra_route_table.id
+}
 
 
 
 
 
+# SECURIT GROUPS
 resource "aws_security_group" "pub_sec_group" {
       
   name        = "eng89_niki_terra_sg_app"
@@ -102,7 +118,7 @@ resource "aws_security_group" "pub_sec_group" {
 }
 
 
-
+# SG RULES
 resource "aws_security_group_rule" "my_ssh" {
   type        = "ingress"
   from_port   = 22
@@ -127,7 +143,7 @@ resource "aws_security_group_rule" "vpc_access"{
 
 
 
-# Launch an instance
+# INSTANCE
 resource "aws_instance" "app_instance" {
 ami                         = var.app_ami_id
 instance_type               = "t2.micro"
