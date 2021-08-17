@@ -41,7 +41,7 @@ variable "igw_name" {
 
 
 variable "app_ami_id" {
-  default="ami-038d7b856fe7557b3"
+  default="ami-0fb3f32d6df7dac18" # ansible app ami
 }
 
 
@@ -55,4 +55,9 @@ variable "name" {
 
 variable "aws_key_name" {
   default = "eng89_niki"
+}
+
+variable "aws_key_path" {
+
+  default = "~/.ssh/eng89_niki.pem"
 }

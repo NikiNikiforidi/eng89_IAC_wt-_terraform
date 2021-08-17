@@ -29,9 +29,11 @@
 
 
 # VPC 
-resource "aws_vpc" "terraform_vpc_code" {
+resource "aws_vpc" "terraform_vpc" {
   cidr_block       = var.cidr_block_0 
   instance_tenancy = "default"
+  # enable_dns_support = true
+  # enable_dns_hostnames = true
   
   tags = {
     Name = var.vpc_name
@@ -42,7 +44,7 @@ resource "aws_vpc" "terraform_vpc_code" {
 
 # INTERNET GATEWAY
 resource "aws_internet_gateway" "terraform_igw" {
-  vpc_id = aws_vpc.terraform_vpc_code.id
+  vpc_id = aws_vpc.terraform_vpc.id
   
   tags = {
     Name = var.igw_name
@@ -55,7 +57,7 @@ resource "aws_internet_gateway" "terraform_igw" {
 
 #  PUBLIC SUBNET
 resource "aws_subnet" "app_subnet" {
-    vpc_id = aws_vpc.terraform_vpc_code.id
+    vpc_id = aws_vpc.terraform_vpc.id
     cidr_block = var.cidr_block_1
     map_public_ip_on_launch = "true" 
     availability_zone = "eu-west-1a"
@@ -70,16 +72,18 @@ resource "aws_subnet" "app_subnet" {
 
 
 
-# DONT THINK ITS WORKING
+# DONT THINK ITS WORKING PROPERLY
 # ROUTE TABLE
+
 resource "aws_route_table" "terra_route_table" {
-    vpc_id = aws_vpc.terraform_vpc_code.id
+    vpc_id = aws_vpc.terraform_vpc.id
+
     route {
         cidr_block = "0.0.0.0/0"
         gateway_id = aws_internet_gateway.terraform_igw.id
     }
     tags = {
-        "Name" = "eng89_niki_terra_RT"
+        Name = "eng89_niki_terra_RT"
     }
 }
 
@@ -92,26 +96,41 @@ resource "aws_route_table_association" "terra_assoc_RT" {
 
 
 
-# SECURIT GROUPS
+# SECURITY GROUPS
 resource "aws_security_group" "pub_sec_group" {
       
-  name        = "eng89_niki_terra_sg_app"
+  name        = "eng89_niki_terra_app"
   description = "app security group"
-  vpc_id =    aws_vpc.terraform_vpc_code.id
+  vpc_id =    aws_vpc.terraform_vpc.id
 
-  ingress {
+
+  ingress {                         # allow to ssh into instance
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["5.203.234.162/32"] # MY IP
+    }
+
+  ingress {                           # allow  for nginx
     from_port   = "80"
     to_port     = "80"
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    # ADD PORT 3000
-    # SMTH ELSE IS WRONG
-  }
+    }
 
-  egress {
+
+
+  ingress {                         # reverse proxy
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    }
+
+  egress {                          # allow all outbound traffic 
     from_port  = 0
     to_port    = 0
-    protocol   = "-1"
+    protocol   = -1
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -121,28 +140,56 @@ resource "aws_security_group" "pub_sec_group" {
 }
 
 
-# SG RULES
-resource "aws_security_group_rule" "my_ssh" {
-  type        = "ingress"
-  from_port   = 22
-  to_port     = 22
-  protocol    = "tcp"
-  cidr_blocks = ["5.203.234.162/32"] # MY IP
-  security_group_id = aws_security_group.pub_sec_group.id
+
+# NETWORK ACLs
+resource "aws_network_acl" "public_nacl" {
+  vpc_id = aws_vpc.terraform_vpc.id
+
+  
+  ingress {
+      protocol   = "tcp"
+      rule_no    = 100
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = 80
+      to_port    = 80
+    }
+
+
+
+  ingress {
+      protocol   = "tcp"
+      rule_no    = 120
+      action     = "allow"
+      cidr_block = "5.203.234.162/32" # MY IP
+      from_port  = 22
+      to_port    = 22
+    }
+
+  egress {
+      protocol   = "tcp"
+      rule_no    = 110
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = 80
+      to_port    = 80
+    }
+
+  egress {
+      protocol   = "tcp"
+      rule_no    = 120
+      action     = "allow"
+      cidr_block = "10.201.2.0/24"
+      from_port  = 27017
+      to_port    = 27017
+    }
+
+
+
+  tags = {
+    Name = "eng89_terra_niki_nACL_pub"
+  }
 }
-
-## NETWORK ACLs?????
-
-resource "aws_security_group_rule" "vpc_access"{
-  type        = "ingress"
-  from_port   = 0
-  to_port     = 0
-  protocol    ="-1"
-  cidr_blocks =[var.cidr_block_0]
-  security_group_id = aws_security_group.pub_sec_group.id 
-}
-
-
 
 
 
@@ -154,11 +201,23 @@ instance_type               = "t2.micro"
 subnet_id = aws_subnet.app_subnet.id
 associate_public_ip_address = true
 
-tags = {
-      Name = var.name      
 
+vpc_security_group_ids = ["${aws_security_group.pub_sec_group.id}"]
+
+
+tags = {
+      Name = var.name   
  }
+
  key_name = var.aws_key_name # goes to varaible.tf file
+
+
+# connection {
+#  type        = "ssh"
+#  user        = "ubuntu"
+#  private_key = file("${var.aws_key_path}")
+#  host        = self.associate_public_ip_address
+# }
 
 }
 
