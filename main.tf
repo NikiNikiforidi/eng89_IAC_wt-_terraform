@@ -105,7 +105,7 @@ resource "aws_security_group" "pub_sec_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["5.203.234.162/32"] # MY IP
+    cidr_blocks = ["5.203.180.202/32"] # MY IP
     }
 
   ingress {                           # allow  for nginx
@@ -142,7 +142,7 @@ resource "aws_security_group" "pub_sec_group" {
 resource "aws_network_acl" "public_nacl" {
   vpc_id = aws_vpc.terraform_vpc.id
 
-  
+  # INBOUND
   ingress {
       protocol   = "tcp"
       rule_no    = 100
@@ -151,6 +151,14 @@ resource "aws_network_acl" "public_nacl" {
       from_port  = 80
       to_port    = 80
     }
+  ingress {
+      protocol   = "tcp"
+      rule_no    = 110
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = 1024
+      to_port    = 65535
+    }
 
 
 
@@ -158,14 +166,16 @@ resource "aws_network_acl" "public_nacl" {
       protocol   = "tcp"
       rule_no    = 120
       action     = "allow"
-      cidr_block = "5.203.234.162/32" # MY IP
+      cidr_block = "5.203.180.202/32" # MY IP
       from_port  = 22
       to_port    = 22
     }
 
+
+# OUTBOUND
   egress {
       protocol   = "tcp"
-      rule_no    = 110
+      rule_no    = 100
       action     = "allow"
       cidr_block = "0.0.0.0/0"
       from_port  = 80
@@ -174,11 +184,19 @@ resource "aws_network_acl" "public_nacl" {
 
   egress {
       protocol   = "tcp"
-      rule_no    = 120
+      rule_no    = 110
       action     = "allow"
       cidr_block = "10.201.2.0/24"
       from_port  = 27017
       to_port    = 27017
+    }
+ egress {
+      protocol   = "tcp"
+      rule_no    = 120
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = 1024
+      to_port    = 65535
     }
 
 
@@ -226,3 +244,5 @@ tags = {
 
 
 # once we are happy and the outcome is green we can run terraform apply
+
+# to provision https://www.terraform.io/docs/language/resources/provisioners/remote-exec.html
