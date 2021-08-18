@@ -32,15 +32,15 @@ resource "aws_security_group" "pri_sec_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    #cidr_blocks = ["5.203.180.202/32"] # MY IP
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["5.203.180.202/32"] # MY IP
+    #cidr_blocks = ["0.0.0.0/0"]
     }
 
   ingress {                           # allow  for nginx
     from_port   = "27017"
     to_port     = "27017"
     protocol    = "tcp"
-    cidr_blocks = ["10.201.1.0/24"]  # public instance app ip
+    cidr_blocks = ["34.245.97.185/32"]  # public instance app ip
     }
 
 
